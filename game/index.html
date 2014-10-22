@@ -86,24 +86,22 @@
 
                 //cargar recursos
             Q.load("tiles_map.png, player.png, enemy.png, coinGold.png, level1.tmx", function() {
-            Q.sheet("tiles","tiles_map.png", { tilew: 70, tileh: 70});          
-            Q.stageScene("level1");
+                Q.sheet("tiles","tiles_map.png", { tilew: 70, tileh: 70});          
+                Q.stageScene("level1");
             });
 
             //creación de la escena level1
             Q.scene("level1",function(stage) {          
-            var background = new Q.TileLayer({ dataAsset: 'level1.tmx', layerIndex: 0, sheet: 'tiles', tileW: 70, tileH: 70, type: Q.SPRITE_NONE });
-            stage.insert(background);   
-            stage.collisionLayer(new Q.TileLayer({ dataAsset: 'level1.tmx', layerIndex:1,  sheet: 'tiles', tileW: 70, tileH: 70 }));  
+                var background = new Q.TileLayer({ dataAsset: 'level1.tmx', layerIndex: 0, sheet: 'tiles', tileW: 70, tileH: 70, type: Q.SPRITE_NONE });
+                stage.insert(background);   
+                stage.collisionLayer(new Q.TileLayer({ dataAsset: 'level1.tmx', layerIndex:1,  sheet: 'tiles', tileW: 70, tileH: 70 }));  
 
-            var player = stage.insert(new Q.Player());
-            stage.add("viewport").follow(player,{x: true, y: true},{minX: 0, maxX: background.p.w, minY: 0, maxY: background.p.h});
-            var enemy = stage.insert(new Q.Enemy({x: 170, y: 0}));
-            var enemy = stage.insert(new Q.Enemy({x: 1000}));
-            var enemy = stage.insert(new Q.Enemy({x: 2000}));
-            stage.insert(new Q.CoinGold({ x: 2600, y: 595 }));
-
-    
+                var player = stage.insert(new Q.Player());
+                stage.add("viewport").follow(player,{x: true, y: true},{minX: 0, maxX: background.p.w, minY: 0, maxY: background.p.h});
+                var enemy = stage.insert(new Q.Enemy({x: 170, y: 0}));
+                var enemy = stage.insert(new Q.Enemy({x: 1000}));
+                var enemy = stage.insert(new Q.Enemy({x: 2000}));
+                stage.insert(new Q.CoinGold({ x: 2600, y: 595 }));
             });
 
             //CReación de la escena fin del juego
