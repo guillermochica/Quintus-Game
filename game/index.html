@@ -24,22 +24,22 @@
                 //Crear subclase jugador
             Q.Sprite.extend("Player",{
                 init: function(p) {
-                this._super(p, { asset: "player.png", x: 110, y: 50, jumpSpeed: -380});
-                this.add('2d, platformerControls'); 
+                    this._super(p, { asset: "player.png", x: 110, y: 50, jumpSpeed: -380});
+                    this.add('2d, platformerControls'); 
 
-                // Write event handlers to respond hook into behaviors.
-                // hit.sprite is called everytime the player collides with a sprite
-                 this.on("hit.sprite",function(collision) {
+                    // Write event handlers to respond hook into behaviors.
+                    // hit.sprite is called everytime the player collides with a sprite
+                    this.on("hit.sprite",function(collision) {
                          // Check the collision, if it's the coin gold, you win!
-                    if(collision.obj.isA("CoinGold")) {
+                        if(collision.obj.isA("CoinGold")) {
                             // Stage the endGame scene above the current stage
-                        Q.stageScene("endGame",1, { label: "¡Ganaste!   " }); 
+                            Q.stageScene("endGame",1, { label: "¡Ganaste!   " }); 
                             // Remove the player to prevent them from moving
-                        this.destroy();
-                    }
-                });
-             
+                            this.destroy();
+                        }
+                    });
                 },
+
                 step: function(dt) {
                      if(Q.inputs['left'] && this.p.direction == 'right') {
                          this.p.flip = 'x';
@@ -54,8 +54,8 @@
             Q.Sprite.extend("Enemy", {
                  init: function(p) {
                      this._super(p, {asset: "enemy.png", vx: 100, visibleonly: true});
-                    this.add('2d, aiBounce');
-                    //Escucha una colision por los lados o por debajo, si colisiona con un jugador, termina el juego. 
+                     this.add('2d, aiBounce');
+                     //Escucha una colision por los lados o por debajo, si colisiona con un jugador, termina el juego. 
                      this.on("bump.left,bump.right,bump.bottom",function(collision) {
                             if(collision.obj.isA("Player")) { 
                                 Q.stageScene("endGame",1, { label: "Has muerto :( " }); 
