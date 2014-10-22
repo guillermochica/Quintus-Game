@@ -30,7 +30,7 @@
                 // Write event handlers to respond hook into behaviors.
                 // hit.sprite is called everytime the player collides with a sprite
                  this.on("hit.sprite",function(collision) {
-                         // Check the collision, if it's the Tower, you win!
+                         // Check the collision, if it's the coin gold, you win!
                     if(collision.obj.isA("CoinGold")) {
                             // Stage the endGame scene above the current stage
                         Q.stageScene("endGame",1, { label: "¡Ganaste!   " }); 
