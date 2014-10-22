@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src='lib/quintus.js'></script>
+        <script src='lib/quintus_sprites.js'></script>
+        <script src='lib/quintus_scenes.js'></script>
+        <script src='lib/quintus_input.js'></script>
+        <script src='lib/quintus_anim.js'></script>
+        <script src='lib/quintus_2d.js'></script>
+        <script src='lib/quintus_touch.js'></script>
+        <script src='lib/quintus_ui.js'></script>
+    </head>
+    <body style="background-color: black;">
+        <script>
+            var Q = Quintus()
+                .include("Sprites, Scenes, Input, 2D, Touch, UI")
+                .setup({
+                    maximize: true,
+                    scaleToFit: true
+                }).controls().touch();  
+
+                //Crear subclase jugador
+            Q.Sprite.extend("Player",{
+                init: function(p) {
+                this._super(p, { asset: "player.png", x: 110, y: 50, jumpSpeed: -380});
+                this.add('2d, platformerControls'); 
+
+                // Write event handlers to respond hook into behaviors.
+                // hit.sprite is called everytime the player collides with a sprite
+                 this.on("hit.sprite",function(collision) {
+                         // Check the collision, if it's the Tower, you win!
+                    if(collision.obj.isA("CoinGold")) {
+                            // Stage the endGame scene above the current stage
+                        Q.stageScene("endGame",1, { label: "¡Ganaste!   " }); 
+                            // Remove the player to prevent them from moving
+                        this.destroy();
+                    }
+                });
+             
+                },
+                step: function(dt) {
+                     if(Q.inputs['left'] && this.p.direction == 'right') {
+                         this.p.flip = 'x';
+                     } 
+                     if(Q.inputs['right']  && this.p.direction == 'left') {
+                         this.p.flip = false;                    
+                     }
+                }                    
+            });
+
+                //Creación de la clase enemigo
+            Q.Sprite.extend("Enemy", {
+                 init: function(p) {
+                     this._super(p, {asset: "enemy.png", vx: 100, visibleonly: true});
+                    this.add('2d, aiBounce');
+                    //Escucha una colision por los lados o por debajo, si colisiona con un jugador, termina el juego. 
+                     this.on("bump.left,bump.right,bump.bottom",function(collision) {
+                            if(collision.obj.isA("Player")) { 
+                                Q.stageScene("endGame",1, { label: "Has muerto :( " }); 
+                                collision.obj.destroy();
+                            }
+                     });
+                        //Si el jugador salta encima del enemigo, desturimos el objeto enemigo y recibimos un ligero
+                    this.on("bump.top",function(collision) {
+                           if(collision.obj.isA("Player")) { 
+                                this.destroy();
+                                collision.obj.p.vy = -300;
+                            }
+                        });
+                    }
+                });
+
+
+            //Creación  dela subclase moneda de oro
+            Q.Sprite.extend("CoinGold", {
+                    init: function(p) {
+                        this._super(p, {asset: "coinGold.png"});
+                    }
+            });
+
+
+   
+
+
+                //cargar recursos
+            Q.load("tiles_map.png, player.png, enemy.png, coinGold.png, level1.tmx", function() {
+            Q.sheet("tiles","tiles_map.png", { tilew: 70, tileh: 70});          
+            Q.stageScene("level1");
+            });
+
+            //creación de la escena level1
+            Q.scene("level1",function(stage) {          
+            var background = new Q.TileLayer({ dataAsset: 'level1.tmx', layerIndex: 0, sheet: 'tiles', tileW: 70, tileH: 70, type: Q.SPRITE_NONE });
+            stage.insert(background);   
+            stage.collisionLayer(new Q.TileLayer({ dataAsset: 'level1.tmx', layerIndex:1,  sheet: 'tiles', tileW: 70, tileH: 70 }));  
+
+            var player = stage.insert(new Q.Player());
+            stage.add("viewport").follow(player,{x: true, y: true},{minX: 0, maxX: background.p.w, minY: 0, maxY: background.p.h});
+            var enemy = stage.insert(new Q.Enemy({x: 170, y: 0}));
+            var enemy = stage.insert(new Q.Enemy({x: 1000}));
+            var enemy = stage.insert(new Q.Enemy({x: 2000}));
+            stage.insert(new Q.CoinGold({ x: 2600, y: 595 }));
+
+    
+            });
+
+            //CReación de la escena fin del juego
+            // To display a game over / game won popup box, 
+            // create a endGame scene that takes in a `label` option
+            // to control the displayed message.
+            Q.scene('endGame',function(stage) {
+                var container = stage.insert(new Q.UI.Container({
+                    x: Q.width/2, y: Q.height/2, fill: "rgba(0,0,0,0.5)"
+            }));
+
+            var button = container.insert(new Q.UI.Button({ x: 0, y: 0, fill: "#CCCCCC",
+                                                  label: "Jugar otra vez" }))         
+            var label = container.insert(new Q.UI.Text({x:10, y: -10 - button.p.h, 
+                                                   label: stage.options.label }));
+            // When the button is clicked, clear all the stages
+            // and restart the game.
+            button.on("click",function() {
+                 Q.clearStages();
+                 Q.stageScene('level1');
+            });
+  
+            // Expand the container to visibily fit it's contents
+            container.fit(20);
+            });
+
+
+    
+        </script>
+    </body>
+</html>
