@@ -53,7 +53,7 @@
                 //Creación de la clase enemigo
             Q.Sprite.extend("Enemy", {
                  init: function(p) {
-                     this._super(p, {asset: "enemy.png", vx: 100, visibleonly: true});
+                     this._super(p, {asset: "enemy.png", vx: -100, y: 0, visibleonly: true});
                      this.add('2d, aiBounce');
                      //Escucha una colision por los lados o por debajo, si colisiona con un jugador, termina el juego. 
                      this.on("bump.left,bump.right,bump.bottom",function(collision) {
@@ -68,22 +68,22 @@
                                 this.destroy();
                                 collision.obj.p.vy = -300;
                             }
-                        });
-                    },
+                    });               
+                    //to make the enemy flip when bumps with a wall
+                    //default direction is left
 
-                    step: function(dt) {
-                        //to make the enemy flip when bumps with a wall
-                        //default direction is left
-                        this.on("bump.left", function(collision){
+                    this.on("bump.left", function(collision){
+                        this.p.flip = 'x';
+                     });
+                    this.on("bump.right", function(collision){
+                        if(this.p.direction == 'right') {
                             this.p.flip = 'x';
-                        });
-                        this.on("bump.right", function(collision){
-                            if(this.p.direction == 'right') {
-                            this.p.flip = 'x';
-                            }   
-                        });          
-                     }
-                });
+                        }
+                    });
+                    
+                }
+                                  
+            });
 
 
             //Creación  dela subclase moneda de oro
