@@ -69,7 +69,20 @@
                                 collision.obj.p.vy = -300;
                             }
                         });
-                    }
+                    },
+
+                    step: function(dt) {
+                        //to make the enemy flip when bumps with a wall
+                        //default direction is left
+                        this.on("bump.left", function(collision){
+                            this.p.flip = 'x';
+                        });
+                        this.on("bump.right", function(collision){
+                            if(this.p.direction == 'right') {
+                            this.p.flip = 'x';
+                            }   
+                        });          
+                     }
                 });
 
 
