@@ -36,6 +36,7 @@
                             Q.stageScene("endGame",1, { label: "¡Ganaste!   " }); 
                             // Remove the player to prevent them from moving
                             this.destroy();
+                            collision.obj.destroy();
                         }
                     });
                 },
