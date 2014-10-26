@@ -53,7 +53,7 @@
                 //Creación de la clase enemigo
             Q.Sprite.extend("Enemy", {
                  init: function(p) {
-                     this._super(p, {asset: "enemy.png", vx: -100, y: 0, visibleonly: true});
+                     this._super(p, {asset: "enemy.png", vx: -100, y: 650, visibleonly: true});
                      this.add('2d, aiBounce');
                      //Escucha una colision por los lados o por debajo, si colisiona con un jugador, termina el juego. 
                      this.on("bump.left,bump.right,bump.bottom",function(collision) {
@@ -111,8 +111,8 @@
 
                 var player = stage.insert(new Q.Player());
                 stage.add("viewport").follow(player,{x: true, y: true},{minX: 0, maxX: background.p.w, minY: 0, maxY: background.p.h});
-                var enemy = stage.insert(new Q.Enemy({x: 170, y: 0}));
-                var enemy = stage.insert(new Q.Enemy({x: 1000}));
+                var enemy = stage.insert(new Q.Enemy({x: 600}));
+                var enemy = stage.insert(new Q.Enemy({x: 1200}));
                 var enemy = stage.insert(new Q.Enemy({x: 2000}));
                 stage.insert(new Q.CoinGold({ x: 2600, y: 595 }));
             });
