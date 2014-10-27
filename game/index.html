@@ -11,18 +11,15 @@
         <script src='lib/quintus_2d.js'></script>
         <script src='lib/quintus_touch.js'></script>
         <script src='lib/quintus_ui.js'></script>
-        <script src='lib/quintus_audio.js'></script>
     </head>
     <body style="background-color: black;">
         <script>
             var Q = Quintus()
-                .include("Sprites, Scenes, Input, 2D, Touch, UI, Audio")
+                .include("Sprites, Scenes, Input, 2D, Touch, UI")
                 .setup({
                     maximize: true,
                     scaleToFit: true
-                }).controls().touch(); 
-
-                Q.enableSound(); 
+                }).controls().touch();  
 
                 //Crear subclase jugador
             Q.Sprite.extend("Player",{
@@ -40,7 +37,6 @@
                             // Remove the player to prevent them from moving
                             this.destroy();
                             collision.obj.destroy();
-                            Q.audio.play('coin.mp3'); 
                         }
                     });
                 },
@@ -72,7 +68,6 @@
                            if(collision.obj.isA("Player")) { 
                                 this.destroy();
                                 collision.obj.p.vy = -300;
-                                Q.audio.play('hit.mp3');  
                             }
                     });               
                     //to make the enemy flip when bumps with a wall
@@ -104,7 +99,7 @@
 
 
                 //cargar recursos
-            Q.load("tiles_map.png, player.png, enemy.png, coinGold.png, level1.tmx, coin.mp3, hit.mp3", function() {
+            Q.load("tiles_map.png, player.png, enemy.png, coinGold.png, level1.tmx", function() {
                 Q.sheet("tiles","tiles_map.png", { tilew: 70, tileh: 70});          
                 Q.stageScene("level1");
             });
